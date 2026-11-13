@@ -180,7 +180,7 @@ openclaw plugins install clawhub:better-auto-memory-openclaw
 从 GitHub 源码装：
 
 ```bash
-openclaw plugins install https://github.com/Mirr0ch1/better-auto-memory-openclaw
+openclaw plugins install git:Mirr0ch1/better-auto-memory-openclaw
 ```
 
 本地开发（链接目录，改代码即时生效）：
