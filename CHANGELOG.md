@@ -10,7 +10,7 @@
   家人姓名、家庭结构、本机路径、真实项目名：
   - 关系示例、导航示例 → 通用例子
   - 真实项目名 → 通用例子
-  - `/home/tester/.openclaw` → `/home/<user>/.openclaw`
+  - 本机绝对路径 → `/home/<user>/.openclaw`
 - `guessRecord` 的关系类启发式同步调整。
 
 ## [0.1.5] - 2026-11-13
