@@ -203,6 +203,13 @@ test('formatStamp: 时间戳是 YYYY-MM-DD HH:MM:SS', () => {
   assert.equal(formatStamp(d.getTime()), '2026-11-13 05:01:02');
 });
 
+test('parseRecordLines: 描述里的换行和 HTML 注释被清掉', () => {
+  const parsed = parseRecordLines('提出问题：问题\r\n<!-- 注入 -->描述');
+  assert.equal(parsed.length, 1);
+  assert.ok(!parsed[0].desc.includes('\r'));
+  assert.ok(!parsed[0].desc.includes('<!--'));
+});
+
 test('类别表：没有待办', () => {
   assert.ok(!BEHAVIOR_CATEGORIES.includes('待办'));
   assert.ok(!FACT_CATEGORIES.includes('待办'));

@@ -5,14 +5,14 @@
 <a href="https://github.com/Mirr0ch1/better-auto-memory-openclaw/releases/latest"><img src="https://img.shields.io/github/v/release/Mirr0ch1/better-auto-memory-openclaw?sort=semver&style=for-the-badge&logo=github&logoColor=white&label=release" alt="Release"></a>
 <a href="https://clawhub.ai/Mirr0ch1/plugins/better-auto-memory-openclaw"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fclawhub.ai%2Fapi%2Fv1%2Fpackages%2Fsearch%3Fq%3D%40Mirr0ch1%2Fbetter-auto-memory-openclaw%26limit%3D1&query=%24.results%5B0%5D.package.stats.downloads&label=ClawHub%20downloads&style=for-the-badge&color=8A2BE2" alt="ClawHub downloads"></a>
 <a href="https://github.com/Mirr0ch1/better-auto-memory-openclaw/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-2ea44f?style=for-the-badge&logo=opensourceinitiative&logoColor=white" alt="MIT license"></a>
-<img src="https://img.shields.io/badge/version-0.1.0-3370FF?style=for-the-badge" alt="Version 0.1.0">
+<img src="https://img.shields.io/badge/version-0.1.1-3370FF?style=for-the-badge" alt="Version 0.1.1">
 
 <img src="https://img.shields.io/badge/OpenClaw-%E2%89%A52026.11.1-2ea44f?style=for-the-badge" alt="OpenClaw >= 2026.11.1">
 <img src="https://img.shields.io/badge/Node-%E2%89%A520-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node 20+">
 <img src="https://img.shields.io/badge/JavaScript-ESM-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript ESM">
 <img src="https://img.shields.io/badge/records-3%20types-6e7781?style=for-the-badge" alt="3 record types">
 
-<img src="https://img.shields.io/badge/tests-84%20passed-2ea44f?style=flat-square" alt="84 tests">
+<img src="https://img.shields.io/badge/tests-96%20passed-2ea44f?style=flat-square" alt="96 tests">
 <img src="https://img.shields.io/badge/telemetry-none-2ea44f?style=flat-square" alt="No telemetry">
 <img src="https://img.shields.io/badge/self--hosted-yes-2ea44f?style=flat-square" alt="Self-hosted">
 <a href="https://github.com/Mirr0ch1/better-auto-memory-openclaw/stargazers"><img src="https://img.shields.io/github/stars/Mirr0ch1/better-auto-memory-openclaw?style=flat-square&logo=github&label=stars" alt="Stars"></a>
@@ -207,7 +207,7 @@ openclaw plugins install --link /path/to/better-auto-memory-openclaw --force --a
         config: {
           agents: ["main", "coder"],
           // agentId → 用户显示名，写进记录行的方括号里。
-          // 不配置则依次回退到渠道显示名、发送者 id。
+          // 不配置则回退到 senderId 的哈希（u_<8 hex>）；渠道显示名一律不用。
           userNames: { main: "米罗", coder: "米罗" },
           summarize: {
             enabled: true,
@@ -244,7 +244,7 @@ openclaw plugins install --link /path/to/better-auto-memory-openclaw --force --a
 | 键 | 默认 | 说明 |
 |---|---|---|
 | `agents` | `["main","coder"]` | 要记录的 agent id |
-| `userNames` | `{}` | `agentId → 用户显示名`。不配置则依次回退到渠道显示名、发送者 id |
+| `userNames` | `{}` | `agentId → 用户显示名`。不配置则回退到 senderId 的哈希（`u_<8 hex>`）；渠道显示名一律不用（安全原因见下） |
 | `summarize.enabled` | `true` | 关掉则只写脱敏后的原文，不调模型 |
 | `summarize.model` | 未设 | `provider/model`。不填 = agent 主模型。填写需 `llm.allowModelOverride` |
 | `summarize.reasoning` | `"low"` | 压缩时的思考档位 |
@@ -256,6 +256,22 @@ openclaw plugins install --link /path/to/better-auto-memory-openclaw --force --a
 | `summarize.includeProjectTag` | `false` | 加 `<!-- project: ... -->` 标注（memory-core 的项目加权协议） |
 | `summarize.redact.secrets` | `true` | 脱敏 token / 密钥 / 账号密码 / 验证码 |
 | `summarize.redact.pii` | `false` | 脱敏身份证 / 手机号 / 银行卡 / 住址 |
+
+### 安全：谁能进记忆
+
+记忆文件是可检索的长期记忆，**进到里面的名字必须是可信来源**：
+
+| 来源 | 进不进记忆 |
+|---|---|
+| `config.userNames[agentId]`（运行者自己配的） | ✅ 原文（会清掉换行和 markdown 记号） |
+| `ctx.senderId` | ✅ **只进哈希**（`u_<8 hex>`）—— 稳定标识，但承载不了任何指令 |
+| 渠道自带的显示名（`channelContext.sender.name` 等） | ❌ **一律不进** |
+
+渠道显示名是**发送者可控的自由文本**。一旦它进了可检索的长期记忆，
+「忽略之前的指令」这类内容就能影响以后的 agent 行为 —— 这正是
+ClawHub 安全扫描对 0.1.0 报的那条风险（0.1.1 已修）。
+
+模型产出的描述同样会清掉换行和 HTML 注释。
 
 ### 脱敏的两个开关
 

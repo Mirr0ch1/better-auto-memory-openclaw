@@ -26,6 +26,7 @@
  *   好处：不阻塞用户回复；Gateway 重启不丢数据。
  */
 
+import { resolveUserName } from './lib/identity.js';
 import { readConfig } from './lib/config.js';
 import { extractDelta, deltaChars } from './lib/messages.js';
 import { appendOutboxEntry, readOutbox, removeOutboxEntries, sessionSlug, updateOutboxAttempts } from './lib/outbox.js';
@@ -63,29 +64,18 @@ export default function registerSessionNotes(api) {
   const logger = api.logger ?? {};
 
   /**
-   * 解析「谁」在提问 —— 写进行为线索里。
+   * 解析「谁」在提问 —— 写进记录行里。
    *
-   * 优先级：
-   *   1. config.userNames[agentId]（运行者显式声明，最可靠）
-   *   2. 渠道自己带的显示名（channelContext.sender.name 之类）
-   *   3. ctx.senderId（渠道内唯一 id，最差但总能用）
-   *
-   * 三级都拿不到 ⇒ 返回 undefined，渲染时省略方括号。
+   * 细节和安全约束见 lib/identity.js：
+   *   **只用可信来源** —— 运行者配置的显示名，或 senderId 的哈希。
+   *   渠道自带的显示名是发送者可控的自由文本，绝不进可检索的长期记忆。
    */
-  function resolveUserName(ctx) {
-    const configured = cfg.userNames?.[ctx?.agentId];
-    if (configured) return configured;
-
-    const sender = ctx?.channelContext?.sender ?? {};
-    const fromChannel =
-      pickString(sender.name) ??
-      pickString(sender.displayName) ??
-      pickString(sender.nickname) ??
-      pickString(sender.senderName) ??
-      pickString(sender.username);
-    if (fromChannel) return fromChannel;
-
-    return pickString(ctx?.senderId);
+  function resolveName(ctx) {
+    return resolveUserName({
+      userNames: cfg.userNames,
+      agentId: ctx?.agentId,
+      senderId: ctx?.senderId,
+    });
   }
 
   function runtimeConfig() {
@@ -339,7 +329,7 @@ export default function registerSessionNotes(api) {
         heading: localTime(new Date()),
         agentId: ctx.agentId,
         sessionKey,
-        userName: resolveUserName(ctx),
+        userName: resolveName(ctx),
         items,
         paths: delta.paths,
         lastUserKey: delta.watermark.anchorKey,
