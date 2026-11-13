@@ -2,6 +2,15 @@
 
 本项目遵循 [语义化版本](https://semver.org/lang/zh-CN/)。
 
+## [0.1.5] - 2026-11-13
+
+### 安全
+
+- **助手回复里 markdown 表格中的凭据也能脱敏。**
+  实机发现：助手把凭据放进表格回复（`| password | xxx |`），这个形式的分隔符是 `|`，
+  原规则只认 `:` 和 `=` ⇒ 整个漏过去，凭据经助手发言进了摘要模型，最后落进记忆文件。
+- **模型输出落盘前再脱敏一次** —— 模型可能把凭据原样抄进行为描述。
+
 ## [0.1.4] - 2026-11-13
 
 ### 安全
@@ -82,6 +91,7 @@
 - `memory_search` / `memory_get`（仍由 memory-core 提供）
 - `plugins.slots.memory`（memory-core 仍是唯一的 memory provider）
 
+[0.1.5]: https://github.com/Mirr0ch1/better-auto-memory-openclaw/releases/tag/v0.1.5
 [0.1.4]: https://github.com/Mirr0ch1/better-auto-memory-openclaw/releases/tag/v0.1.4
 [0.1.3]: https://github.com/Mirr0ch1/better-auto-memory-openclaw/releases/tag/v0.1.3
 [0.1.2]: https://github.com/Mirr0ch1/better-auto-memory-openclaw/releases/tag/v0.1.2
