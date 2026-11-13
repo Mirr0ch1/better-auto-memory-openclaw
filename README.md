@@ -5,14 +5,14 @@
 <a href="https://github.com/Mirr0ch1/better-auto-memory-openclaw/releases/latest"><img src="https://img.shields.io/github/v/release/Mirr0ch1/better-auto-memory-openclaw?sort=semver&style=for-the-badge&logo=github&logoColor=white&label=release" alt="Release"></a>
 <a href="https://clawhub.ai/Mirr0ch1/plugins/better-auto-memory-openclaw"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fclawhub.ai%2Fapi%2Fv1%2Fpackages%2Fsearch%3Fq%3D%40Mirr0ch1%2Fbetter-auto-memory-openclaw%26limit%3D1&query=%24.results%5B0%5D.package.stats.downloads&label=ClawHub%20downloads&style=for-the-badge&color=8A2BE2" alt="ClawHub downloads"></a>
 <a href="https://github.com/Mirr0ch1/better-auto-memory-openclaw/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-2ea44f?style=for-the-badge&logo=opensourceinitiative&logoColor=white" alt="MIT license"></a>
-<img src="https://img.shields.io/badge/version-0.1.3-3370FF?style=for-the-badge" alt="Version 0.1.3">
+<img src="https://img.shields.io/badge/version-0.1.4-3370FF?style=for-the-badge" alt="Version 0.1.4">
 
 <img src="https://img.shields.io/badge/OpenClaw-%E2%89%A52026.11.1-2ea44f?style=for-the-badge" alt="OpenClaw >= 2026.11.1">
 <img src="https://img.shields.io/badge/Node-%E2%89%A520-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node 20+">
 <img src="https://img.shields.io/badge/JavaScript-ESM-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript ESM">
 <img src="https://img.shields.io/badge/records-3%20types-6e7781?style=for-the-badge" alt="3 record types">
 
-<img src="https://img.shields.io/badge/tests-96%20passed-2ea44f?style=flat-square" alt="96 tests">
+<img src="https://img.shields.io/badge/tests-99%20passed-2ea44f?style=flat-square" alt="99 tests">
 <img src="https://img.shields.io/badge/telemetry-none-2ea44f?style=flat-square" alt="No telemetry">
 <img src="https://img.shields.io/badge/self--hosted-yes-2ea44f?style=flat-square" alt="Self-hosted">
 <a href="https://github.com/Mirr0ch1/better-auto-memory-openclaw/stargazers"><img src="https://img.shields.io/github/stars/Mirr0ch1/better-auto-memory-openclaw?style=flat-square&logo=github&label=stars" alt="Stars"></a>
@@ -323,7 +323,7 @@ ClawHub 安全扫描对 0.1.0 报的那条风险（0.1.1 已修）。
 ## 开发
 
 ```bash
-npm test              # 96 个单测
+npm test              # 99 个单测
 openclaw plugins reload better-auto-memory-openclaw
 ```
 

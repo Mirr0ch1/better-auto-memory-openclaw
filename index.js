@@ -54,11 +54,6 @@ const MAX_SUMMARY_ATTEMPTS = 3;
 // （实测 cron 运行确实会触发 agent_end；本机 56 个 cron + 30 分钟一次心跳）
 const AUTOMATION_TRIGGERS = new Set(['cron', 'heartbeat', 'schedule', 'webhook', 'task']);
 
-/** 取非空字符串，否则 undefined。 */
-function pickString(value) {
-  return typeof value === 'string' && value.trim() ? value.trim() : undefined;
-}
-
 export default function registerSessionNotes(api) {
   const cfg = readConfig(api.pluginConfig);
   const logger = api.logger ?? {};
@@ -145,6 +140,7 @@ export default function registerSessionNotes(api) {
     );
 
     let records;
+    let bodyOverride;
     if (!cfg.summarize.enabled) {
       // 关闭压缩：直接用用户原话拼记录，不调模型
       records = userTexts.map((text) => guessRecord(text));
@@ -173,7 +169,16 @@ export default function registerSessionNotes(api) {
           logger.warn?.(
             `[better-auto-memory-openclaw] 连续 ${outcome.attempts} 次压缩失败，降级写用户原话: ${item.runId}`,
           );
-          records = userTexts.map((text) => guessRecord(text));
+          // 保留用户原话，并标明这不是模型归纳的结果
+          bodyOverride = [
+            `自动摘要失败（已尝试 ${outcome.attempts} 次，模型不可用），以下保留用户原始发言。`,
+            '',
+            ...userTexts.map((text) => {
+              const r = guessRecord(text);
+              return `${r.category}：${r.desc}`;
+            }),
+          ].join('\n');
+          records = [];
         } else {
           logger.warn?.(
             `[better-auto-memory-openclaw] 候选模型全部失败（${outcome.attempts}/${MAX_SUMMARY_ATTEMPTS}），记录保留在 outbox 待重试: ${item.runId}`,
@@ -195,13 +200,15 @@ export default function registerSessionNotes(api) {
       }
     }
 
-    const body = renderRecordLines({
-      records,
-      userName: item.userName,
-      agentId,
-      at: item.at,
-      answered,
-    }).join('\n');
+    const body =
+      bodyOverride ??
+      renderRecordLines({
+        records,
+        userName: item.userName,
+        agentId,
+        at: item.at,
+        answered,
+      }).join('\n');
 
     let projectTag = '';
     if (cfg.summarize.includeProjectTag) {

@@ -62,6 +62,29 @@ test('redactSecrets: 中文账号被打码', () => {
   assert.ok(!out.includes('adminuser'), `实际: ${out}`);
 });
 
+test('redactSecrets: JSON 形式（引号包起来的键）的凭据被打码', () => {
+  // ClawHub 安全扫描对 0.1.1 报的就是这条：通用规则要求「字段名后面紧跟 : 或 =」，
+  // 而 JSON 的键名后面还隔着一个引号 ⇒ 整个漏过去。
+  const out = redactSecrets('{"password": "hunter2secret"}');
+  assert.ok(!out.includes('hunter2secret'), `实际: ${out}`);
+  assert.ok(out.includes('password'), `实际: ${out}`);
+});
+
+test('redactSecrets: JSON 形式（单引号 / 嵌套）也被打码', () => {
+  assert.ok(!redactSecrets("{'token': 'abcdefgh'}").includes('abcdefgh'));
+  assert.ok(!redactSecrets('{"nested": {"secret": "topsecretvalue"}}').includes('topsecretvalue'));
+  assert.ok(!redactSecrets('{"api_key": "sk-abcdefgh1234"}').includes('sk-abcdefgh1234'));
+});
+
+test('redactSecrets: JSON 里非凭据字段不误伤', () => {
+  const out = redactSecrets('{"name": "hunter2secret", "password": "x"}');
+  assert.ok(out.includes('hunter2secret'), `不该误伤普通字段: ${out}`);
+});
+
+test('redactSecrets: 太短的值不误伤', () => {
+  assert.equal(redactSecrets('{"password": "x"}'), '{"password": "x"}');
+});
+
 test('redactSecrets: 不误伤普通文本', () => {
   const normal = '今天北京天气怎么样，明天要不要穿厚一点';
   assert.equal(redactSecrets(normal), normal);

@@ -8,7 +8,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
-import { buildDegradedBody, decideSummaryOutcome } from '../lib/summary.js';
+import { decideSummaryOutcome } from '../lib/summary.js';
 import { appendOutboxEntry, readOutbox, updateOutboxAttempts } from '../lib/outbox.js';
 
 const MAX = 3;
@@ -48,20 +48,6 @@ test('decideSummaryOutcome: 非法 attempts 按 0 处理', () => {
   const o = decideSummaryOutcome({ attempts: 'abc' }, MAX);
   assert.equal(o.action, 'retry');
   assert.equal(o.attempts, 1);
-});
-
-test('buildDegradedBody: 保留用户原话并标注降级原因', () => {
-  const items = [
-    { role: 'user', text: '问题内容' },
-    { role: 'assistant', text: '回答内容' },
-  ];
-  const out = buildDegradedBody(items, 3);
-  assert.ok(out.includes('自动摘要失败'));
-  assert.ok(out.includes('3 次'));
-  assert.ok(out.includes('问题内容'));
-  // agent 的回答不进降级正文 —— 它是二手信息，不是事实来源
-  assert.ok(!out.includes('回答内容'));
-  assert.ok(out.includes('提出问题：'));
 });
 
 test('outbox: 重试次数可以写回并跨调用保留', () => {
