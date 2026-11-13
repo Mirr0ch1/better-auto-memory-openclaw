@@ -2,6 +2,13 @@
 
 本项目遵循 [语义化版本](https://semver.org/lang/zh-CN/)。
 
+## [0.1.7] - 2026-11-13
+
+### 清理
+
+- 0.1.6 的 changelog 里还留着私人词条（举例时用到的旧值），本版清掉。
+  ⇒ **0.1.7 的发布产物里没有任何私人信息**。
+
 ## [0.1.6] - 2026-11-13
 
 ### 清理
@@ -102,6 +109,7 @@
 - `memory_search` / `memory_get`（仍由 memory-core 提供）
 - `plugins.slots.memory`（memory-core 仍是唯一的 memory provider）
 
+[0.1.7]: https://github.com/Mirr0ch1/better-auto-memory-openclaw/releases/tag/v0.1.7
 [0.1.6]: https://github.com/Mirr0ch1/better-auto-memory-openclaw/releases/tag/v0.1.6
 [0.1.5]: https://github.com/Mirr0ch1/better-auto-memory-openclaw/releases/tag/v0.1.5
 [0.1.4]: https://github.com/Mirr0ch1/better-auto-memory-openclaw/releases/tag/v0.1.4

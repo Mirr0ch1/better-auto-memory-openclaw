@@ -2,7 +2,7 @@
   "id": "better-auto-memory-openclaw",
   "name": "Better Auto Memory",
   "description": "每轮对话结束后，用模型把这一轮压成三类记录行 —— 行为（用户做了什么）、事实（用户明确说过的偏好/关系/计划/决定）、助手结论（助手实际完成用户交代的任务后得出的可复用结论，标「助手结论：」），写入 <workspace>/memory/sessions/ 的 markdown 文件，自动进入 memory-core 索引，可被 memory_search / memory_get 检索。不记录待办、不记录未完成的事、不记录一次性结果。事实只能来自用户发言，助手结论单独标注。只在内存目录写文件，不改动 embedding、memory_search、memory_get 或 memory-core 配置。",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "categories": [
     "memory"
   ],
