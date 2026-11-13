@@ -1,0 +1,41 @@
+{
+  "name": "@mirroclaw/better-auto-memory-openclaw",
+  "version": "0.1.0",
+  "description": "OpenClaw 插件：每轮对话结束后用模型把这一轮压成三类记录行（行为 / 事实 / 助手结论），写入 memory/sessions/ 的 markdown 文件，自动进入 memory-core 索引。",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test test/"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "peerDependencies": {
+    "openclaw": ">=2026.11.1"
+  },
+  "openclaw": {
+    "extensions": [
+      "./index.js"
+    ],
+    "compat": {
+      "pluginApi": ">=2026.11.1"
+    },
+    "build": {
+      "openclawVersion": "2026.11.1",
+      "pluginSdkVersion": "2026.11.1"
+    }
+  },
+  "keywords": [
+    "openclaw",
+    "openclaw-plugin",
+    "memory",
+    "clawhub"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mirr0ch1/better-auto-memory-openclaw.git"
+  },
+  "author": "Mirr0ch1",
+  "homepage": "https://github.com/Mirr0ch1/better-auto-memory-openclaw#readme"
+}

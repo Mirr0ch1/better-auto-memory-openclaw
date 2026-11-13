@@ -1,0 +1,87 @@
+{
+  "id": "better-auto-memory-openclaw",
+  "name": "Better Auto Memory",
+  "description": "每轮对话结束后，用模型把这一轮压成三类记录行 —— 行为（用户做了什么）、事实（用户明确说过的偏好/关系/计划/决定）、助手结论（助手实际完成用户交代的任务后得出的可复用结论，标「助手结论：」），写入 <workspace>/memory/sessions/ 的 markdown 文件，自动进入 memory-core 索引，可被 memory_search / memory_get 检索。不记录待办、不记录未完成的事、不记录一次性结果。事实只能来自用户发言，助手结论单独标注。只在内存目录写文件，不改动 embedding、memory_search、memory_get 或 memory-core 配置。",
+  "version": "0.1.0",
+  "categories": ["memory"],
+  "activation": {
+    "onStartup": true
+  },
+  "contracts": {
+    "tools": []
+  },
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "agents": {
+        "type": "array",
+        "items": { "type": "string" },
+        "description": "要记录的 agent id 列表。默认 [\"main\", \"coder\"]。"
+      },
+      "userNames": {
+        "type": "object",
+        "additionalProperties": { "type": "string" },
+        "description": "agentId → 用户显示名，写进行为线索的方括号里。例：{\"main\": \"米罗\", \"coder\": \"米罗\"}。不配置则依次回退到渠道显示名、发送者 id。"
+      },
+      "summarize": {
+        "type": "object",
+        "additionalProperties": false,
+        "description": "摘要生成参数。",
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "description": "关掉则只把原始增量写进会话文件，不调用模型压缩。默认 true。"
+          },
+          "model": {
+            "type": "string",
+            "description": "压缩模型，provider/model 形式。不填 = 使用该 agent 的默认模型（并遵守它在 openclaw.json 里配置的 fallback 顺序）。填写则需要 plugins.entries.better-auto-memory-openclaw.llm.allowModelOverride=true，否则被忽略。"
+          },
+          "reasoning": {
+            "type": "string",
+            "description": "压缩时使用的思考档位。默认 low。"
+          },
+          "maxChars": {
+            "type": "number",
+            "description": "单条摘要的最大字符数。留空 = 不限制（默认）。"
+          },
+          "maxTokens": {
+            "type": "number",
+            "description": "压缩时允许模型生成的最大 token 数。留空 = 不限制（默认，用模型自己的上限）。"
+          },
+          "maxInputChars": {
+            "type": "number",
+            "description": "送进模型的原始对话上限（超出部分截断）。默认 6000。"
+          },
+          "minDeltaChars": {
+            "type": "number",
+            "description": "本轮增量小于该字符数则不记录、不调用模型。默认 120。"
+          },
+          "timeoutMs": {
+            "type": "number",
+            "description": "单次压缩调用超时。默认 45000。"
+          },
+          "includeProjectTag": {
+            "type": "boolean",
+            "description": "是否给摘要加 <!-- project: ... --> 标注（memory-core 的项目加权协议）。默认 false。"
+          },
+          "redact": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "两个独立的脱敏开关。secrets 管凭据类（默认开）；pii 管真人身份信息（默认关，因为记忆需要能保存身份证/手机号/住址）。脱敏在送模型之前执行。",
+            "properties": {
+              "secrets": {
+                "type": "boolean",
+                "description": "脱敏 token / 密钥 / 账号密码 / 验证码。默认 true。"
+              },
+              "pii": {
+                "type": "boolean",
+                "description": "脱敏身份证 / 手机号 / 银行卡 / 住址。默认 false。"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
