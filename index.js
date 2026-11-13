@@ -197,6 +197,8 @@ export default function registerSessionNotes(api) {
         records = parsed.length
           ? ensureUserCoverage(parsed, userTexts)
           : userTexts.map((text) => guessRecord(text));
+        // 模型可能把凭据原样抄进行为描述（它看到的助手发言里就有）⇒ 落盘前再脱敏一次
+        records = records.map((r) => ({ ...r, desc: applyRedact(r.desc, cfg.summarize.redact) }));
       }
     }
 

@@ -85,6 +85,12 @@ test('redactSecrets: 太短的值不误伤', () => {
   assert.equal(redactSecrets('{"password": "x"}'), '{"password": "x"}');
 });
 
+test('redactSecrets: markdown 表格里的凭据也被打码', () => {
+  // 助手回复常把凭据放进表格：`| password | hunter2secret |`
+  const out = redactSecrets('| 字段 | 值 |\n| password | hunter2secret |');
+  assert.ok(!out.includes('hunter2secret'), `实际: ${out}`);
+});
+
 test('redactSecrets: 不误伤普通文本', () => {
   const normal = '今天北京天气怎么样，明天要不要穿厚一点';
   assert.equal(redactSecrets(normal), normal);

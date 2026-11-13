@@ -1,6 +1,6 @@
 {
   "name": "better-auto-memory-openclaw",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "OpenClaw 插件：每轮对话结束后用模型把这一轮压成三类记录行（行为 / 事实 / 助手结论），写入 memory/sessions/ 的 markdown 文件，自动进入 memory-core 索引。",
   "type": "module",
   "main": "index.js",
