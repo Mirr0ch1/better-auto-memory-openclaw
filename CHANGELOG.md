@@ -2,6 +2,17 @@
 
 本项目遵循 [语义化版本](https://semver.org/lang/zh-CN/)。
 
+## [0.1.6] - 2026-11-13
+
+### 清理
+
+- **把示例里的私人信息换成通用例子。** 这个仓库是公开的，示例里不该出现
+  家人姓名、家庭结构、本机路径、真实项目名：
+  - 关系示例、导航示例 → 通用例子
+  - 真实项目名 → 通用例子
+  - `/home/tester/.openclaw` → `/home/<user>/.openclaw`
+- `guessRecord` 的关系类启发式同步调整。
+
 ## [0.1.5] - 2026-11-13
 
 ### 安全
@@ -91,6 +102,7 @@
 - `memory_search` / `memory_get`（仍由 memory-core 提供）
 - `plugins.slots.memory`（memory-core 仍是唯一的 memory provider）
 
+[0.1.6]: https://github.com/Mirr0ch1/better-auto-memory-openclaw/releases/tag/v0.1.6
 [0.1.5]: https://github.com/Mirr0ch1/better-auto-memory-openclaw/releases/tag/v0.1.5
 [0.1.4]: https://github.com/Mirr0ch1/better-auto-memory-openclaw/releases/tag/v0.1.4
 [0.1.3]: https://github.com/Mirr0ch1/better-auto-memory-openclaw/releases/tag/v0.1.3
