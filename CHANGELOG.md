@@ -2,6 +2,16 @@
 
 本项目遵循 [语义化版本](https://semver.org/lang/zh-CN/)。
 
+## [0.1.3] - 2026-11-13
+
+### 修复
+
+- **助手结论又收紧一层**。实机发现模型仍把「确认单测数量」这类**会变的数据**
+  （数量、版本号、时间点、当前状态）记成了助手结论。
+
+  prompt 规则 2c 补上这个排除项，few-shot 反例同步加强。
+  已实机验证：同一条提问现在只产出行为行，不再产出助手结论。
+
 ## [0.1.2] - 2026-11-13
 
 ### 修复
@@ -54,6 +64,7 @@
 - `memory_search` / `memory_get`（仍由 memory-core 提供）
 - `plugins.slots.memory`（memory-core 仍是唯一的 memory provider）
 
+[0.1.3]: https://github.com/Mirr0ch1/better-auto-memory-openclaw/releases/tag/v0.1.3
 [0.1.2]: https://github.com/Mirr0ch1/better-auto-memory-openclaw/releases/tag/v0.1.2
 [0.1.1]: https://github.com/Mirr0ch1/better-auto-memory-openclaw/releases/tag/v0.1.1
 [0.1.0]: https://github.com/Mirr0ch1/better-auto-memory-openclaw/releases/tag/v0.1.0
