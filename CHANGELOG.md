@@ -2,6 +2,16 @@
 
 本项目遵循 [语义化版本](https://semver.org/lang/zh-CN/)。
 
+## [0.1.2] - 2026-11-13
+
+### 修复
+
+- **助手结论的门槛收紧**。实机发现模型把两类东西误记成了「助手结论」：
+  - 问答的答案（「一共有 96 个单测」）
+  - 执行回执（「已照你说的改好了」）
+
+  prompt 规则 2 补上这两个排除项，并加了一条 few-shot 反例。
+
 ## [0.1.1] - 2026-11-13
 
 ### 安全
@@ -44,5 +54,6 @@
 - `memory_search` / `memory_get`（仍由 memory-core 提供）
 - `plugins.slots.memory`（memory-core 仍是唯一的 memory provider）
 
+[0.1.2]: https://github.com/Mirr0ch1/better-auto-memory-openclaw/releases/tag/v0.1.2
 [0.1.1]: https://github.com/Mirr0ch1/better-auto-memory-openclaw/releases/tag/v0.1.1
 [0.1.0]: https://github.com/Mirr0ch1/better-auto-memory-openclaw/releases/tag/v0.1.0
