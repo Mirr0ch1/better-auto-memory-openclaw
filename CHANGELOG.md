@@ -2,6 +2,24 @@
 
 本项目遵循 [语义化版本](https://semver.org/lang/zh-CN/)。
 
+## [0.1.4] - 2026-11-13
+
+### 安全
+
+- **JSON 形式的凭据不再绕过脱敏。**
+  ClawHub 安全扫描对 0.1.1 报的第二条：引号包起来的键（JSON / YAML）
+  里的凭据能绕过脱敏送进模型。
+
+  原因：通用规则要求「字段名后面紧跟 `:` 或 `=`」，而 JSON 的键名后面
+  还隔着一个闭引号 ⇒ `{"password": "xxx"}` 整个漏过去。
+
+  新增一条专门处理引号键的规则，保留引号结构、只打码值。
+
+### 清理
+
+- 删掉两处死代码：`buildDegradedBody`（降级路径已直接用 `guessRecord`）、
+  `index.js` 里遗留的 `pickString`（已挪进 `lib/identity.js`）。
+
 ## [0.1.3] - 2026-11-13
 
 ### 修复
@@ -64,6 +82,7 @@
 - `memory_search` / `memory_get`（仍由 memory-core 提供）
 - `plugins.slots.memory`（memory-core 仍是唯一的 memory provider）
 
+[0.1.4]: https://github.com/Mirr0ch1/better-auto-memory-openclaw/releases/tag/v0.1.4
 [0.1.3]: https://github.com/Mirr0ch1/better-auto-memory-openclaw/releases/tag/v0.1.3
 [0.1.2]: https://github.com/Mirr0ch1/better-auto-memory-openclaw/releases/tag/v0.1.2
 [0.1.1]: https://github.com/Mirr0ch1/better-auto-memory-openclaw/releases/tag/v0.1.1
